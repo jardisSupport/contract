@@ -36,8 +36,12 @@
     "keywords": [
         "contracts",
         "interfaces",
-        "JardisSupport",
-        "Headgent",
-        "DDD"
+        "ports",
+        "psr",
+        "php",
+        "domain-driven-design",
+        "hexagonal-architecture",
+        "jardissupport",
+        "headgent"
     ]
 }
