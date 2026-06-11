@@ -1,6 +1,6 @@
 {
     "name": "jardissupport/contract",
-    "homepage": "https://docs.jardis.io/en/support/contract",
+    "homepage": "https://jardis.io",
     "description": "Consolidated contract interfaces for all Jardis packages — Kernel, Data, Repository, DbQuery, Messaging, Validation, Workflow, and more",
     "type": "library",
     "license": "MIT",
@@ -31,7 +31,9 @@
         }
     },
     "support": {
-        "email": "jardisCore@headgent.dev"
+        "issues": "https://github.com/jardisSupport/contract/issues",
+        "docs": "https://docs.jardis.io/en/support/contract",
+        "email": "jardisDev@headgent.com"
     },
     "keywords": [
         "contracts",
