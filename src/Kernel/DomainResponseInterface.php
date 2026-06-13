@@ -32,9 +32,12 @@ interface DomainResponseInterface
     /**
      * Get all collected domain events, keyed by context name.
      *
+     * Without a scope, returns all events (structurally unchanged). With a
+     * scope, returns only the events of that scope.
+     *
      * @return array<string, array<int, object>>
      */
-    public function getEvents(): array;
+    public function getEvents(?EventScope $scope = null): array;
 
     /**
      * Get all errors, keyed by context name.
