@@ -32,16 +32,19 @@ interface ContextResponseInterface
     public function getData(): array;
 
     /**
-     * Add a domain event.
+     * Add an event, classified by its publication scope.
      */
-    public function addEvent(object $event): self;
+    public function addEvent(object $event, EventScope $scope = EventScope::Internal): self;
 
     /**
      * Get events from this result, keyed by context name.
      *
+     * Without a scope, returns all events (structurally unchanged). With a
+     * scope, returns only the events of that scope.
+     *
      * @return array<string, array<int, object>>
      */
-    public function getEvents(): array;
+    public function getEvents(?EventScope $scope = null): array;
 
     /**
      * Add an error message.
