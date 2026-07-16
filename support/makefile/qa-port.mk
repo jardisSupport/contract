@@ -6,3 +6,7 @@ phpstan: ## Run PHPStan analysis
 phpcs: ## Run coding standards
 	$(DOCKER_COMPOSE) run --rm --no-deps phpcli vendor/bin/phpcs /app/src
 .PHONY: phpcs
+
+check-envelope-consistency: ## Check docs/response-envelope.md status ladder matches ResponseStatus enum cases
+	$(DOCKER_COMPOSE) run --rm --no-deps phpcli php /app/bin/check-envelope-consistency.php
+.PHONY: check-envelope-consistency
