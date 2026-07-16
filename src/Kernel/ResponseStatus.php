@@ -23,6 +23,7 @@ enum ResponseStatus: int
     case Unauthorized = 401;
     case Forbidden = 403;
     case NotFound = 404;
+    case MethodNotAllowed = 405;
     case Conflict = 409;
     case RuleViolation = 422;
     case InternalError = 500;
