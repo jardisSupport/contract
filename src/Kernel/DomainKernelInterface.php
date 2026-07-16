@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace JardisSupport\Contract\Kernel;
 
 use JardisSupport\Contract\DbConnection\ConnectionPoolInterface;
+use JardisSupport\Contract\EventListener\EventListenerRegistryInterface;
 use JardisSupport\Contract\Filesystem\FilesystemServiceInterface;
 use JardisSupport\Contract\Mailer\MailerInterface;
 use PDO;
@@ -75,6 +76,21 @@ interface DomainKernelInterface
      * @return EventDispatcherInterface|null Dispatcher or null if not configured
      */
     public function eventDispatcher(): ?EventDispatcherInterface;
+
+    /**
+     * Gets the event listener registry for self-registering event routers.
+     *
+     * Paired with eventDispatcher(): implementations back both accessors with
+     * the same underlying provider instance — one PSR-14 dispatcher (send),
+     * one registry (add listeners). Generated `{Agg}EventRouter` scaffolds use
+     * it to register themselves on the domain facade's constructor, so a
+     * fresh build carries new routers automatically without any Application
+     * wiring. Nullable like every other service: without a registry, event
+     * routing stays inactive rather than failing.
+     *
+     * @return EventListenerRegistryInterface|null Registry or null if event routing is not configured
+     */
+    public function eventListenerRegistry(): ?EventListenerRegistryInterface;
 
     /**
      * Gets the PSR-18 HTTP client for external service calls.

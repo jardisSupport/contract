@@ -17,7 +17,7 @@ This package provides all interface contracts for the Jardis ecosystem in a sing
 
 | Namespace | Contracts | Purpose |
 |-----------|-----------|---------|
-| `Kernel` | 4 | DomainKernel, BoundedContext, ContextResponse, DomainResponse |
+| `Kernel` | 7 | DomainKernel, BoundedContext (deprecated), ContextResponse, DomainResponse, EventScope, ResponseStatus, GeneratedContextInterface (marker) |
 | `ClassVersion` | 2 | Versioned class resolution |
 | `Connection` | 1 | Generic connection abstraction |
 | `Data` | 3 | Hydration, Identity, FieldMapper |
@@ -33,7 +33,7 @@ This package provides all interface contracts for the Jardis ecosystem in a sing
 | `Filesystem` | 5 | Filesystem (Reader/Writer), FileInfo + Exception |
 | `Workflow` | 6 | Workflow engine + orchestration (Workflow, Builder, NodeBuilder, Config, Context, Result) — 7 named transitions: `onSuccess`, `onFail`, `onTimeout`, `onSkip`, `onCancel`, `onEvent`, `onExit` |
 
-**67 contracts** across 15 domains.
+**70 contracts** across 15 domains.
 
 ---
 
@@ -68,6 +68,47 @@ JardisSupport\Contract\
 ├── Validation\
 └── Workflow\
 ```
+
+---
+
+## Kernel — v2 additions (Kernel-Entkopplung)
+
+Three additions to `Kernel\` that let a generated domain drop its compile-time
+dependency on `jardiscore/kernel`'s base classes while keeping the same
+runtime vocabulary.
+
+### `ResponseStatus` enum
+
+`JardisSupport\Contract\Kernel\ResponseStatus` — an `int`-backed enum of
+domain-neutral response status codes (`Success = 200`, `Created = 201`,
+`NoContent = 204`, `ValidationError = 400`, `Unauthorized = 401`,
+`Forbidden = 403`, `NotFound = 404`, `Conflict = 409`, `RuleViolation = 422`,
+`InternalError = 500`), ported 1:1 from `jardiscore/kernel`'s
+`JardisCore\Kernel\Response\ResponseStatus`. Generated domains import it from
+here instead of from `jardiscore/kernel`.
+
+### `DomainKernelInterface::eventListenerRegistry()`
+
+The Kernel interface (the "Koffer") gained an 11th accessor:
+`eventListenerRegistry(): ?EventListenerRegistryInterface`. It is paired with
+`eventDispatcher()` — both are typically backed by the same underlying
+provider instance, one side for dispatching (PSR-14), one side for
+registering listeners. Generated `{Agg}EventRouter` scaffolds use this
+accessor to self-register on the domain facade's constructor. Nullable like
+every other service on the interface: without a registry, event routing
+simply stays inactive.
+
+### `GeneratedContextInterface` marker
+
+`JardisSupport\Contract\Kernel\GeneratedContextInterface` is an empty marker
+interface. Every generated `{Domain}Context` implements it, so the resolve
+path recognizes generated context classes via
+`is_subclass_of($resolved, GeneratedContextInterface::class)` — independent
+of domain boundaries (cross-domain services included) and without requiring
+a shared package base class to extend. It replaces the detection role
+formerly played by `BoundedContextInterface`, which is now `@deprecated` (not
+removed — kept for code still written against the old `jardiscore/kernel`
+`BoundedContext` base class).
 
 ---
 
