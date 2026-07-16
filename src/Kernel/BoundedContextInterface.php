@@ -13,6 +13,14 @@ use Throwable;
  *   - handle()  pass-through, inherits the caller's payload+version
  *   - context() fresh context, sets payload+version explicitly
  *               (used at API boundaries to start a new call chain)
+ *
+ * @deprecated Superseded by {@see GeneratedContextInterface} (Kernel-Entkopplung,
+ * contract v2). BC-subclass detection in the resolve path no longer hangs off
+ * this interface; generated `{Domain}Context` classes implement the empty
+ * marker instead, which works across domain boundaries without a shared
+ * package base class. Kept for backward compatibility with code written
+ * against the old `jardiscore/kernel` `BoundedContext` base class — not
+ * implemented by newly generated domains.
  */
 interface BoundedContextInterface
 {
